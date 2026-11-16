@@ -56,7 +56,7 @@ export default async function Home() {
       <section className="border-t border-white/15 bg-[#141812] px-5 py-24 md:px-10 lg:py-32">
         <div className="mx-auto grid max-w-[1480px] gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
           <div><p className="text-xs font-bold uppercase tracking-[.22em] text-primary">Built by people, for people</p><h2 className="mt-7 text-5xl font-semibold leading-[.98] tracking-[-.055em] md:text-7xl">Curiosity is part of the work.</h2></div>
-          <div className="lg:max-w-xl lg:justify-self-end"><p className="text-lg leading-relaxed text-white/65">We bring design, engineering, data, and experimentation together. Meet Wildan, our founder, and the thinking behind the products.</p><Link href="/about" className="mt-8 inline-flex items-center gap-8 border-b border-primary pb-2 font-semibold text-primary hover:gap-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">Get to know us <span aria-hidden="true">↗</span></Link></div>
+          <div className="lg:max-w-xl lg:justify-self-end"><p className="text-lg leading-relaxed text-white/65">We bring design, engineering, data, and experimentation together. Get to know the thinking and the connected disciplines behind the products.</p><Link href="/about" className="mt-8 inline-flex items-center gap-8 border-b border-primary pb-2 font-semibold text-primary hover:gap-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">Get to know us <span aria-hidden="true">↗</span></Link></div>
         </div>
       </section>
     </main>
