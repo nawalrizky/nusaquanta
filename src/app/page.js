@@ -15,6 +15,8 @@ const process = [
 
 export default async function Home() {
   const [featured, { cards }] = await Promise.all([getShowcaseCards(), getProjectCards()]);
+  const featuredIds = new Set(featured.map((card) => card.id));
+  const heroCards = [...featured, ...cards.filter((card) => !featuredIds.has(card.id))];
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-black font-reddit-sans text-white">
@@ -29,7 +31,7 @@ export default async function Home() {
             <Link href="/#contact" className="inline-flex min-h-12 items-center gap-9 rounded-full border border-white/30 px-6 font-semibold transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">Start a conversation <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
-        <HeroProjectStack cards={featured.slice(0, 2)} />
+        <HeroProjectStack cards={heroCards} />
       </section>
 
       <section className="border-y border-white/15 bg-[#10120e] px-5 py-8 md:px-10 lg:px-16" aria-label="Selected project facts">
