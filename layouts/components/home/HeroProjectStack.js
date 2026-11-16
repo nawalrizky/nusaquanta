@@ -8,7 +8,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 const spring = { type: 'spring', stiffness: 95, damping: 20, mass: 0.9 };
 const tiltSpring = { stiffness: 180, damping: 20, mass: 0.6 };
 
-function ProjectCard({ card, index, isFront, reduceMotion }) {
+function ProjectCard({ card, index, isFront, isQueued = false, reduceMotion }) {
   const [hovered, setHovered] = useState(false);
   const rawRotateX = useMotionValue(0);
   const rawRotateY = useMotionValue(0);
@@ -40,9 +40,12 @@ function ProjectCard({ card, index, isFront, reduceMotion }) {
   return (
     <motion.div
       className="absolute left-[10%] top-[24%] w-[78%]"
-      style={{ zIndex: isFront ? 2 : 1, rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      style={{ zIndex: isQueued ? 0 : isFront ? 2 : 1, pointerEvents: isQueued ? 'none' : 'auto', rotateX, rotateY, transformStyle: 'preserve-3d' }}
+      aria-hidden={isQueued}
       initial={false}
-      animate={reduceMotion ? (isFront ? { ...frontPosition, scale: 1 } : backPosition) : (isFront ? frontPosition : backPosition)}
+      animate={reduceMotion
+        ? (isFront ? { ...frontPosition, scale: 1, opacity: 1 } : { ...backPosition, opacity: isQueued ? 0 : 1 })
+        : (isFront ? { ...frontPosition, opacity: 1 } : { ...backPosition, opacity: isQueued ? 0 : 1 })}
       transition={reduceMotion ? { duration: 0 } : spring}
       onPointerEnter={(event) => {
         if (event.pointerType !== 'touch' && !reduceMotion) setHovered(true);
@@ -53,15 +56,19 @@ function ProjectCard({ card, index, isFront, reduceMotion }) {
       <Link
         href={`/project/${card.id}`}
         aria-label={`View ${card.title} project`}
+        tabIndex={isQueued ? -1 : undefined}
         className="group relative block aspect-[1.45] overflow-hidden rounded-2xl border border-white/20 bg-[#171717] shadow-[0_35px_90px_rgba(0,0,0,.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
       >
         <Image
           src={card.imageUrl || '/images/project/placeholder.png'}
           alt={`${card.title} digital product interface`}
           fill
-          priority={index === 0}
+          loading="eager"
           sizes="(min-width: 1024px) 38vw, 75vw"
           className="object-cover"
+          onLoad={(event) => {
+            if (isQueued) event.currentTarget.decode?.().catch(() => {});
+          }}
         />
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 to-transparent px-5 pb-5 pt-14 text-white">
           <div><span className="text-[10px] font-bold uppercase tracking-[.18em] text-primary">Selected work / {String(index + 1).padStart(2, '0')}</span><p className="mt-1 text-lg font-semibold md:text-xl">{card.title}</p></div>
@@ -109,11 +116,15 @@ export default function HeroProjectStack({ cards = [] }) {
   [cardOrder[0], cardOrder[1]] = [cardOrder[1], cardOrder[0]];
   const frontCardIndex = cardOrder[(frontIndex - 1 + cards.length) % cards.length];
   const backCardIndex = cardOrder[frontIndex % cards.length];
+  const queuedCardIndex = cardOrder[(frontIndex + 1) % cards.length];
+  const visibleCardIndexes = cards.length > 2
+    ? [queuedCardIndex, backCardIndex, frontCardIndex]
+    : [backCardIndex, frontCardIndex];
 
   return (
     <div className="relative mx-auto aspect-[1.03] w-full max-w-[700px] [perspective:1100px]" aria-label="Featured Nusa Quanta projects">
-      {[backCardIndex, frontCardIndex].map((index) => (
-        <ProjectCard key={cards[index].id} card={cards[index]} index={index} isFront={index === frontCardIndex} reduceMotion={reduceMotion} />
+      {visibleCardIndexes.map((index) => (
+        <ProjectCard key={cards[index].id} card={cards[index]} index={index} isFront={index === frontCardIndex} isQueued={index === queuedCardIndex && cards.length > 2} reduceMotion={reduceMotion} />
       ))}
       <div className="pointer-events-none absolute bottom-[6%] left-0 z-[3] -rotate-[7deg] rounded-full border border-dashed border-primary bg-black px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-primary md:text-xs">Ideas into use ↗</div>
     </div>
