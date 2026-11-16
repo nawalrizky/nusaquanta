@@ -34,11 +34,11 @@ export default async function Home() {
         <HeroProjectStack cards={heroCards} />
       </section>
 
-      <section className="border-y border-white/15 bg-[#10120e] px-5 py-8 md:px-10 lg:px-16" aria-label="Selected project facts">
+      <section className="border-y border-white/15 bg-[#10120e] px-5 py-8 md:px-10 lg:px-16" aria-label="Studio at a glance">
         <div className="mx-auto grid max-w-[1480px] gap-8 md:grid-cols-3 md:gap-0">
           <div className="md:border-r md:border-white/15 md:pr-8"><p className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">{cards.length}</p><p className="mt-1 text-sm text-white/60">projects in our archive</p></div>
-          <div className="md:border-r md:border-white/15 md:px-8"><p className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">~30 sec</p><p className="mt-1 text-sm text-white/60">per patient in the documented Senyumin workflow</p></div>
-          <div className="md:pl-8"><p className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">~70K</p><p className="mt-1 text-sm text-white/60">PPSMB UGM users in its first two weeks</p></div>
+          <div className="md:border-r md:border-white/15 md:px-8"><p className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">04</p><p className="mt-1 text-sm text-white/60">connected capabilities</p></div>
+          <div className="md:pl-8"><p className="text-4xl font-semibold tracking-tight text-primary md:text-5xl">{String(process.length).padStart(2, '0')}</p><p className="mt-1 text-sm text-white/60">steps from discovery to improvement</p></div>
         </div>
       </section>
 
